@@ -66,6 +66,81 @@ export default function Home() {
           </p>
         </motion.section>
 
+        <motion.section
+          id="tech"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="scroll-mt-24 py-24 px-6 max-w-5xl mx-auto text-center"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-10">Tech Stack</h2>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              "React",
+              "JavaScript",
+              "Java",
+              "Spring Boot",
+              "MySQL",
+              "Oracle DB",
+              "Next.js",
+              "React Native",
+              "Tailwind CSS",
+              "Git",
+              "Jira",
+              "CI/CD",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="px-4 py-2 text-sm rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="experience"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="scroll-mt-24 py-24 px-6 max-w-4xl mx-auto"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">Experience</h2>
+
+          <div className="space-y-8">
+
+            <div className="border-l border-white/20 pl-6">
+              <h3 className="text-xl font-semibold">Senior Software Engineer</h3>
+              <p className="text-gray-400 text-sm">Maybank • 2021 - Present</p>
+              <p className="text-gray-400 mt-2 text-sm">
+                Led full-stack development of Loan Origination System using React, Java, and Spring Boot.
+              </p>
+            </div>
+
+            <div className="border-l border-white/20 pl-6">
+              <h3 className="text-xl font-semibold">Business Solution Engineer</h3>
+              <p className="text-gray-400 text-sm">Maybank • 2018 - 2021</p>
+              <p className="text-gray-400 mt-2 text-sm">
+                Developed UI and backend services for loan prospecting and onboarding systems.
+              </p>
+            </div>
+
+            <div className="border-l border-white/20 pl-6">
+              <h3 className="text-xl font-semibold">Systems Engineer</h3>
+              <p className="text-gray-400 text-sm">Infosys • 2014 - 2016</p>
+              <p className="text-gray-400 mt-2 text-sm">
+                Built investment banking CRM UI using AngularJS and enterprise tools.
+              </p>
+            </div>
+
+          </div>
+        </motion.section>
+
+
         {/* PROJECTS SECTION */}
         <motion.section
           id="projects"
