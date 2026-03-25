@@ -2,74 +2,122 @@
 
 import { useEffect, useState } from "react";
 
+const sections = [
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "tech", label: "Skills" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+  { id: "why-me", label: "Why Me" },
+  { id: "contact", label: "Contact" },
+];
+
 export default function Navbar() {
-    const [active, setActive] = useState("home");
+  const [active, setActive] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const sections = ["home", "about", "projects", "contact"];
+  useEffect(() => {
+    const handleScroll = () => {
+      let current = "home";
 
-        const handleScroll = () => {
-            let current = "home";
+      sections.forEach(({ id }) => {
+        const element = document.getElementById(id);
+        if (element) {
+          const offsetTop = element.offsetTop - 120;
 
-            sections.forEach((id) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    const rect = element.getBoundingClientRect();
+          if (window.scrollY >= offsetTop) {
+            current = id;
+          }
+        }
+      });
 
-                    // Section is in viewport (top half)
-                    if (rect.top <= window.innerHeight / 2) {
-                        current = id;
-                    }
-                }
-            });
+      setActive(current);
+    };
 
-            // Special fix for bottom of page (Contact section)
-            if (
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 50
-            ) {
-                current = "contact";
-            }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-            setActive(current);
-        };
+  const linkClass = (id) =>
+    `relative transition ${
+      active === id
+        ? "text-sky-400"
+        : "text-gray-400 hover:text-white"
+    }`;
 
-        window.addEventListener("scroll", handleScroll);
+  return (
+    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        {/* Logo */}
+        <a
+          href="#home"
+          className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text"
+        >
+          Abhishek Gupta
+        </a>
 
-    const linkClass = (id) =>
-        `transition ${active === id
-            ? "text-white"
-            : "text-gray-400 hover:text-white"
-        }`;
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-8 text-sm">
+          {sections.map(({ id, label }) => (
+            <a key={id} href={`#${id}`} className={linkClass(id)}>
+              {label}
+              {active === id && (
+                <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-sky-400 rounded"></span>
+              )}
+            </a>
+          ))}
+        </nav>
 
-    return (
-        <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/5 border-b border-white/10">
-            <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+        {/* Right Section (CTA + Mobile Menu Button) */}
+        <div className="flex items-center gap-4">
 
-                {/* Logo */}
-                <h1 className="text-xl font-semibold tracking-wider bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text">
-                    <a href="#home" className="bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text font-semibold">
-                        Abhishek Gupta
-                    </a>
-                </h1>
+          {/* CTA */}
+          <a
+            href="#contact"
+            className="hidden md:inline-block bg-gradient-to-r from-sky-500 to-blue-600 px-5 py-2 rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg"
+          >
+            Hire Me
+          </a>
 
-                {/* Nav Links */}
-                <nav className="hidden md:flex gap-10 text-sm">
-                    <a href="#home" className={linkClass("home")}>Home</a>
-                    <a href="#about" className={linkClass("about")}>About</a>
-                    <a href="#projects" className={linkClass("projects")}>Projects</a>
-                    <a href="#contact" className={linkClass("contact")}>Contact</a>
-                </nav>
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-gray-300 text-2xl"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
+        </div>
+      </div>
 
-                {/* CTA */}
-                <button className="bg-white text-black px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-200 transition">
-                    Hire Me
-                </button>
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-black/90 backdrop-blur-lg px-6 pb-6">
+          <div className="flex flex-col gap-4 mt-4">
+            {sections.map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                onClick={() => setMenuOpen(false)}
+                className={`text-base ${
+                  active === id ? "text-sky-400" : "text-gray-400"
+                }`}
+              >
+                {label}
+              </a>
+            ))}
 
-            </div>
-        </header>
-    );
+            {/* Mobile CTA */}
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              className="mt-4 bg-gradient-to-r from-sky-500 to-blue-600 px-5 py-3 rounded-full text-center font-medium"
+            >
+              Hire Me
+            </a>
+          </div>
+        </div>
+      )}
+    </header>
+  );
 }
